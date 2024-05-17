@@ -1,0 +1,42 @@
+import cv2
+import numpy as np
+
+'''img = cv2.imread("cat.jpg")
+img1 = cv2.resize(img, (300, 300))
+planet = cv2.imread("planet.jpg")
+img2 = cv2.resize(planet, (300, 300))
+weightedSum = cv2.addWeighted(img1, 0.5, img2, 0.9, 0)
+#subImg = cv2.subtract(img1, img2)
+cv2.imshow("weight", weightedSum)'''
+
+#errosion of an image
+img = cv2.imread("cat.jpg")
+
+'''#creating of kernel for errosion
+kernel = np.ones((3,3), np.uint8)
+img = cv2.erode(img, kernel)
+cv2.imshow("errode", img)'''
+
+'''#blurring a image - guassian blur
+cv2.imshow("normal", img)
+cv2.waitKey(0)
+gBlur = cv2.GaussianBlur(img, (7,7), 0)
+cv2.imshow("blur", gBlur)
+cv2.waitKey(0)
+
+#blur - median blur
+mBlur = cv2.medianBlur(img, 5)
+cv2.imshow("median", mBlur)
+
+#blur - bilateral blur
+cv2.waitKey(0)
+bBlur = cv2.bilateralFilter(img,6, 90, 90)
+cv2.imshow("bilateral", bBlur)'''
+
+#bordering image
+#cv2.copyMakeBorder(img, top, bottom, left, right, borederType, color value)
+border = cv2.copyMakeBorder(img, 100, 100, 100, 100, cv2.BORDER_REFLECT, value = (0,0, 255))
+cv2.imshow("border", border)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
