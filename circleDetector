@@ -1,0 +1,46 @@
+import cv2
+import numpy as np
+
+img = cv2.imread("circle.jpg")
+'''params = cv2.SimpleBlobDetector_Params() 
+
+#set area filtering paprameters
+params.filterByArea = True
+params.minArea = 100
+#filter by circluarity
+params.filterByCircularity = True
+params.minCircularity = 0.1
+#convexity
+params.filterByConvexity = True
+params.minConvexity = 0.2 
+#set inertia filtering - the disturbences and smoothness
+params.filterByInertia = True
+params.minInertiaRatio = 0.01
+
+
+#create a detector wth params
+detector = cv2.SimpleBlobDetector_create(params)
+ident = detector.detect(circle)
+
+kernel = np.zeros((1,1))
+blobs = cv2.drawKeypoints(circle, ident, kernel, (0, 100, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+numBlobs = len(ident)
+cv2.putText(blobs, "Number of blobs: " + str(numBlobs), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (9, 100, 255), 2)
+
+cv2.imshow("filter", blobs)
+'''
+
+#half circle
+imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+imgBlur = cv2.blur(imgGray, (3,3))
+detectCirc = cv2.HoughCircles(imgBlur, cv2.HOUGH_GRADIENT, 1, 20, param1 = 50, param2 = 30, minRadius = 1, maxRadius = 40)
+if detectCirc is not None:
+    detectCirc = np.uint16(detectCirc)
+for i in detectCirc[0, :]:
+    x, y, r = i[0], i[1], i[2]
+    cv2.circle(img, (x,y), r, (0, 255, 0), 3)
+    cv2.imshow("circles", img)
+    cv2.waitKey(0)
+
+#cv2.waitKey(0)
+cv2.destroyAllWindows()
