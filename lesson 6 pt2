@@ -1,0 +1,34 @@
+from PIL import Image
+import os
+
+def resize(inputFolder, outputFolder, size):
+    if not os.path.exists(outputFolder):
+        os.makedirs(outputFolder)
+    
+    for i in os.listdir(inputFolder):
+        if i.endswith(".jpg") or i.endswith(".jpeg") or i.endswith(".png"):
+            a = Image.open(os.path.join(inputFolder, i))
+            resizedImg = a.resize(size)
+            path = os.path.join(outputFolder, i)
+            resizedImg.save(path, "JPEG", quality = 95)
+            print(f"{i} is resized")
+
+def gifMake(inputFolder, gif):
+    img = []
+    
+    for i in os.listdir(inputFolder):
+        if i.endswith(".jpg") or i.endswith(".jpeg") or i.endswith(".png"):
+            img.append(Image.open(os.path.join(inputFolder, i)))
+            
+    img[0].save(gif, save_all=True, append_images = img[1:], duration = 500, loop = 1)
+
+inputFolder = "C:\\Users\\rich1\\OneDrive\\Open CV\\vidImages"
+outputFolder = "a"
+
+gif = "Landscape.gif"
+
+size = (100, 100)
+
+resize(inputFolder, outputFolder, size)
+gifMake(inputFolder, gif)
+    
