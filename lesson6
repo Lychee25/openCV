@@ -1,0 +1,49 @@
+import cv2
+import os
+from PIL import Image
+
+#need to delete video to make any changes
+
+os.chdir("C:\\Users\\rich1\\OneDrive\\Open CV\\vidImages")
+path = "C:\\Users\\rich1\\OneDrive\\Open CV\\vidImages"
+
+height= 0
+width = 0
+
+numImages = len(os.listdir("."))
+
+for i in os.listdir("."):
+    a = Image.open(os.path.join(path, i))
+    Owidth, Oheight = a.size
+    height += Oheight
+    width += Owidth
+meanW = width//numImages
+meanH = height//numImages
+
+for i in os.listdir("."):
+    if i.endswith(".jpg") or i.endswith(".jpeg") or i .endswith(".png"):
+        a = Image.open(os.path.join(path, i))
+        width, height = a.size
+        resizedImg = a.resize((meanW, meanH))
+        resizedImg.save(i, "JPEG", quality = 95)
+        print(a.filename.split("\\")[-1], "is resized")
+        
+def video():
+    os.chdir("C:\\Users\\rich1\\OneDrive\\Open CV\\vidImages")
+    name = "Landscape.avi"
+    loadImg = []
+    for i in os.listdir("."):
+        if i.endswith(".jpg") or i.endswith(".jpeg") or i.endswith(".png"):
+            loadImg.append(i)
+    
+    print(loadImg)
+    
+    frame = cv2.imread(os.path.join(".", loadImg[0]))
+    frameH, frameW, frameLayers = frame.shape
+    vid = cv2.VideoWriter(name, 0, 0.5, (frameW, frameH))
+    for i in loadImg:
+        vid.write(cv2.imread(os.path.join(".", i)))
+    cv2.destroyAllWindows()
+    vid.release()
+
+video()
