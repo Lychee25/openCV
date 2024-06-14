@@ -1,0 +1,30 @@
+import cv2
+import numpy as np
+
+img = cv2.imread("chair.jpg")
+imgHSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+lowerRed1 = np.array([0, 40, 40])
+upperRed1 = np.array([0, 255, 255])
+mask1 = cv2.inRange(imgHSV, lowerRed1, upperRed1)
+
+lowerRed2 = np.array([120, 40, 40])
+upperRed2 = np.array([180, 255, 255])
+mask2 = cv2.inRange(imgHSV, lowerRed2, upperRed2)
+
+finalMask = mask1 + mask2
+
+finalMask = cv2.morphologyEx(finalMask, cv2.MORPH_OPEN, np.ones((3,3), np.uint8), iterations=1)
+finalMask = cv2.dilate(finalMask, np.ones((3,3), np.uint8), iterations=1)
+finalMask = cv2.bitwise_not(finalMask)
+
+cv2.imshow("norm", img)
+cv2.waitKey(0)
+cv2.imshow("hsv", imgHSV)
+cv2.waitKey(0)
+cv2.imshow("mask1", mask1)
+cv2.waitKey(0)
+cv2.imshow("mask2", mask2)
+cv2.waitKey(0)
+cv2.imshow("final mask", finalMask)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
