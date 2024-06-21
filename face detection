@@ -1,0 +1,32 @@
+import cv2
+import os
+
+haar_file = "haarcascade_frontalface_default.xml"
+folder = "data sets"
+subFolder = "richa"
+
+path = os.path.join(folder, subFolder)
+if not os.path.isdir(path):
+    os.mkdir(path)
+    
+width, height = 130, 100
+faceCascade = cv2.CascadeClassifier(haar_file)
+webCam = cv2.VideoCapture(0)
+
+count = 1
+
+while count < 30:
+    value, img = webCam.read()
+    grayIMG = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    faces = faceCascade.detectMultiScale(grayIMG, 1.3, 4) #used to detect faces
+    for (x, y, w, h) in faces:
+        cv2.rectangle(img, (x, y), (x+w, y+h), (85, 30, 78), 4)
+        face = grayIMG[y:y+h, x:x+w]
+        faceResize = cv2.resize(face, (width, height))
+        cv2.imwrite("%s/%s.png"%(path, count), faceResize)
+    count += 1
+    
+    cv2.imshow("face", img)
+    key = cv2.waitKey(10)
+    if key == 27:
+        break     
