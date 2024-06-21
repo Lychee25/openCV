@@ -1,0 +1,40 @@
+import cv2
+import numpy as np
+
+vid = cv2.VideoCapture("20240621_161133.mp4")
+
+for i in range(60):
+    returnVal, backgrnd = vid.read()
+    if returnVal == False:
+        continue
+    
+while vid.isOpened():
+    count = 0
+    returnVal, img = vid.read()
+    if not returnVal:
+        break
+    count += 1
+    imgHSV = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    
+    lowerPurp1 = np.array([129, 40, 40])
+    lowerPurp2 = np.array([158, 255, 255])
+    mask1 = cv2.inRange(imgHSV, lowerPurp1, lowerPurp2)
+    
+    '''upperPurp1 = np.array([158, 40, 40])
+    upperPurp2 = np.array([158, 255, 255])
+    mask2 = cv2.inRange(imgHSV, upperPurp1, upperPurp2)'''
+    
+    finalMask = mask1 
+    finalMask = cv2.morphologyEx(finalMask, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8), iterations=1)
+    finalMask = cv2.dilate(finalMask, np.ones((3, 3), np.uint8), iterations=1)
+    
+    finalVideo = cv2.bitwise_not(finalMask)
+    
+    result1 = cv2.bitwise_and(backgrnd, backgrnd, mask=finalMask)
+    result2 = cv2.bitwise_and(img, img, mask=finalVideo)
+    
+    finalOutput = cv2.addWeighted(result1, 1, result2, 1, 0)
+    cv2.imshow("final", finalOutput)
+    k = cv2.waitKey(10)
+    if k == 27:
+        break
